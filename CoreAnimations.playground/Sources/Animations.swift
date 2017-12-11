@@ -35,6 +35,15 @@ extension AnimationMaker {
         let begin = maker.layer.presentation()?.value(forKeyPath: keyPath) ?? maker.layer.value(forKeyPath: keyPath)
         return animate(duration: duration, from: begin, to: over)
     }
+    
+}
+
+extension AnimationMaker where Value == CGPoint {
+    /// 创建按 path 轨迹移动 duration 秒的动画
+    @discardableResult
+    public func value(along path:CGPath, duration:TimeInterval) -> Animation<CAKeyframeAnimation, Value> {
+        return animate(duration: duration, path: path)
+    }
 }
 
 

@@ -58,4 +58,12 @@ extension CGPoint {
         let dy = radius * sin(radian)
         return CGPoint(x: self.x + dx, y: self.y - dy)
     }
+    
+    /// 塞贝尔曲线
+    public func quadCurve(to point:CGPoint, control:(CGPoint, CGPoint) -> CGPoint) -> CGPath {
+        let path = CGMutablePath()
+        path.move(to: self)
+        path.addQuadCurve(to: point, control: control(self, point))
+        return path
+    }
 }

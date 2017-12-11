@@ -19,7 +19,7 @@ open class NetStateLayer: CALayer {
 
     private static let color = CGColor.device(ARGB: 0xFF333333)!
 
-    open var state:NetStateStyle = .automate {
+    open var state:NetStateStyle = .failure {
         didSet { guard case .automate = state else { return updateAnimations() } }
     }
     open var progress:CGFloat = 0 {
@@ -30,15 +30,28 @@ open class NetStateLayer: CALayer {
     }
     
     open func successAnimate(to endRect:CGRect, withDuration animDuration:TimeInterval = 0.5) {
-        let startRect = frame
-        frame = endRect
+        let startRect = presentation()?.frame ?? frame
+        let path = startRect.center.quadCurve(to: endRect.center) {
+            CGPoint(x: $1.x, y: $0.y)
+        }
         
+        position = endRect.center
+        opacity = 0
+        let startTransform:CATransform3D = presentation()?.transform ?? transform
+        let endTransform:CATransform3D = CATransform3DMakeScale(endRect.width / startRect.width, endRect.height / startRect.height, 1)
         animate(forKey: "cornerRadius") {
-            $0.size
-                .value(from: startRect.size, to: endRect.size, duration: animDuration)
+            $0.alpha.value(from: 1, to: 0, duration: animDuration)
+            $0.transform
+                .value(from: startTransform, to: endTransform, duration: animDuration)
             $0.position
-                .value(from: startRect.center, to: endRect.center, duration: animDuration)
-            $0.timingFunction(.easeInOut)
+                .value(along: path, duration: animDuration)
+            $0.timingFunction(.easeInOut).onStoped({
+                [weak self] (finish:Bool) in
+                if finish {
+                    self?.removeFromSuperlayer()
+                    self?.opacity = 1
+                }
+            })
         }
         shareLayer.removeAllAnimations()
     }
@@ -48,14 +61,14 @@ open class NetStateLayer: CALayer {
         let cornerValue = cornerRadius
         let color = NetStateLayer.color
         
-        frame = endRect
+        position = endRect.center
+        bounds.size = endRect.size
         cornerRadius = 0
         shadowColor = .blackClean
         shadowOpacity = 0.8
         shadowOffset = CGSize(width: 1, height: 1)
         
         animate(forKey: "cornerRadius") {
-            
             $0.cornerRadius
                 .value(from: 0, to: cornerValue, duration: animDuration)
             $0.size
@@ -164,9 +177,9 @@ open class NetStateLayer: CALayer {
         shareLayer.strokeEnd = over
         shareLayer.animate(forKey: "state") {
             $0.strokeStart
-                .value(from: start, to: 0, duration: Double(start) / 2)
+                .value(from: start, to: 0, duration: Double(start) / 4)
             $0.strokeEnd
-                .value(from: end, to: over, duration: Double(fabs(over - end)))
+                .value(from: end, to: over, duration: Double(fabs(over - end)) / 2)
             $0.timingFunction(.easeOut)
         }
     }
