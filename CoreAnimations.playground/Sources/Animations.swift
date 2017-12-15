@@ -339,12 +339,12 @@ extension AnimationMaker where Value == CGRect {
 
 extension AnimationMaker where Value == CATransform3D {
     
-    /// 对 point 的 translation 属性进行动画
+    /// 对 transform 的 translation(位移) 属性进行动画
     public var translation:UnknowMaker<Layer, CGAffineTransform> {
         return UnknowMaker<Layer, CGAffineTransform>(maker:maker, keyPath:"\(keyPath).translation")
     }
     
-    /// 对 point 的 rotation 属性进行动画
+    /// 对 transform 的 rotation(旋转) 属性进行动画
     public var rotation:UnknowMaker<Layer, CGAffineTransform> {
         return UnknowMaker<Layer, CGAffineTransform>(maker:maker, keyPath:"\(keyPath).rotation")
     }
@@ -418,5 +418,12 @@ open class CAAnimationStopDelegate :NSObject, CAAnimationDelegate {
     
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         onStop(flag)
+    }
+}
+
+extension CALayer {
+    public var alpha:Float {
+        set { opacity = newValue }
+        get { return opacity }
     }
 }

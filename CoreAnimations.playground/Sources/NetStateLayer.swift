@@ -37,6 +37,15 @@ open class NetStateLayer: CALayer {
         
         position = endRect.center
         opacity = 0
+        
+        shareLayer.removeAllAnimations()
+        shareLayer.opacity = 0
+        shareLayer.animate(forKey: "state") {
+            $0.alpha.value(from: 0, to: 0, duration: animDuration)
+        }
+        
+        removeAllAnimations()
+        
         let startTransform:CATransform3D = presentation()?.transform ?? transform
         let endTransform:CATransform3D = CATransform3DMakeScale(endRect.width / startRect.width, endRect.height / startRect.height, 1)
         animate(forKey: "cornerRadius") {
@@ -53,13 +62,18 @@ open class NetStateLayer: CALayer {
                 }
             })
         }
-        shareLayer.removeAllAnimations()
     }
     
     open func failureAnimate(to endRect:CGRect, withDuration animDuration:TimeInterval = 0.5) {
         let startRect = frame
         let cornerValue = cornerRadius
         let color = NetStateLayer.color
+        
+        shareLayer.removeAllAnimations()
+        shareLayer.opacity = 0
+        shareLayer.animate(forKey: "state") {
+            $0.alpha.value(from: 0, to: 0, duration: animDuration)
+        }
         
         position = endRect.center
         bounds.size = endRect.size
@@ -68,6 +82,8 @@ open class NetStateLayer: CALayer {
         shadowOpacity = 0.8
         shadowOffset = CGSize(width: 1, height: 1)
         
+        removeAllAnimations()
+
         animate(forKey: "cornerRadius") {
             $0.cornerRadius
                 .value(from: 0, to: cornerValue, duration: animDuration)
@@ -81,7 +97,6 @@ open class NetStateLayer: CALayer {
                 .value(from: color, to: .blackClean, duration: animDuration)
             $0.timingFunction(.easeInOut)
         }
-        shareLayer.removeAllAnimations()
     }
     
     open func startAnimate(from startRect:CGRect, to endRect:CGRect, withDuration animDuration:TimeInterval = 0.5) {
@@ -143,7 +158,10 @@ open class NetStateLayer: CALayer {
         shareLayer.frame = bounds
         var transform = CGAffineTransform.identity
         let path = CGPath(roundedRect: bounds.insetBy(dx: 5, dy: 5), cornerWidth: (bounds.width - 10) / 2, cornerHeight: (bounds.height - 10) / 2, transform: &transform)
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
         shareLayer.path = path
+        CATransaction.commit()
     }
     
     open func updateAnimations() {
@@ -156,7 +174,9 @@ open class NetStateLayer: CALayer {
         case .automate:
             shareLayer.strokeStart = 0
             shareLayer.strokeEnd = 1
+            shareLayer.opacity = 1
             shareLayer.animate(forKey: "state") {
+                $0.alpha.value(to: 1, duration: 0.2)
                 $0.strokeStart
                     .value(from: 0, to: 1, duration: 1).delay(0.5)
                 $0.strokeEnd
@@ -175,11 +195,14 @@ open class NetStateLayer: CALayer {
         
         shareLayer.strokeStart = 0
         shareLayer.strokeEnd = over
+        shareLayer.opacity = 1
         shareLayer.animate(forKey: "state") {
+            $0.alpha
+                .value(to: 1, duration: 0.1)
             $0.strokeStart
-                .value(from: start, to: 0, duration: Double(start) / 4)
+                .value(from: start, to: 0, duration: Double(start) / 8)
             $0.strokeEnd
-                .value(from: end, to: over, duration: Double(fabs(over - end)) / 2)
+                .value(from: end, to: over, duration: Double(fabs(over - end)) / 4)
             $0.timingFunction(.easeOut)
         }
     }
