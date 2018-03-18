@@ -18,6 +18,7 @@
 		39D4E69F1FCE94A400DBA9CF /* NetStateLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D4E69E1FCE94A400DBA9CF /* NetStateLayer.swift */; };
 		39D4E6A21FCE951800DBA9CF /* CGColor+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D4E6A11FCE951700DBA9CF /* CGColor+Init.swift */; };
 		39E59DD81FBD703500ADCBF0 /* CoreAnimations.h in Headers */ = {isa = PBXBuildFile; fileRef = 39E59DD61FBD703500ADCBF0 /* CoreAnimations.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		39EA0AF1202939AF000F81ED /* CATransform+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EA0AF0202939AE000F81ED /* CATransform+Init.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		39D4E6A11FCE951700DBA9CF /* CGColor+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CGColor+Init.swift"; path = "CoreAnimations.playground/Sources/CGColor+Init.swift"; sourceTree = "<group>"; };
 		39E59DD51FBD703500ADCBF0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		39E59DD61FBD703500ADCBF0 /* CoreAnimations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAnimations.h; sourceTree = "<group>"; };
+		39EA0AF0202939AE000F81ED /* CATransform+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CATransform+Init.swift"; path = "CoreAnimations.playground/Sources/CATransform+Init.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 		06500D381D81115900156E8A /* CoreAnimations */ = {
 			isa = PBXGroup;
 			children = (
+				39EA0AEF2029394B000F81ED /* Transform */,
 				39E59D8E1FBD6D9B00ADCBF0 /* Animations */,
 				39E59D8D1FBD6D9400ADCBF0 /* Operator */,
 				39E59D8C1FBD6D8400ADCBF0 /* Layers */,
@@ -120,6 +123,14 @@
 				39E59DD61FBD703500ADCBF0 /* CoreAnimations.h */,
 			);
 			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		39EA0AEF2029394B000F81ED /* Transform */ = {
+			isa = PBXGroup;
+			children = (
+				39EA0AF0202939AE000F81ED /* CATransform+Init.swift */,
+			);
+			name = Transform;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -205,6 +216,7 @@
 				39D4E69F1FCE94A400DBA9CF /* NetStateLayer.swift in Sources */,
 				3955B6DD1FCE933900764EC7 /* AnimationsMaker.swift in Sources */,
 				3955B6DC1FCE933900764EC7 /* AnimationUtil.swift in Sources */,
+				39EA0AF1202939AF000F81ED /* CATransform+Init.swift in Sources */,
 				3930733A1FD1367F004A23C2 /* CVTextLayer.swift in Sources */,
 				3955B6DE1FCE933900764EC7 /* Animation.swift in Sources */,
 				3955B6E01FCE933900764EC7 /* AnimationMaker.swift in Sources */,
