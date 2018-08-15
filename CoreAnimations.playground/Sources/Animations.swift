@@ -8,7 +8,33 @@
 
 import QuartzCore
 
+extension TransitionMaker {
+    /// 创建 指定转场动画方向 并执行 duration 秒的动画
+    
+    @discardableResult
+    public func from(_ direction:Value, duration:TimeInterval) -> AnimationTransition<Value> {
+        return animate(from: direction, duration: duration)
+    }
+    
+    // 如果想不起来from 用统一的value开头
+    @discardableResult
+    public func value(from direction:Value, duration:TimeInterval) -> AnimationTransition<Value> {
+        return animate(from: direction, duration: duration)
+    }
+    
+}
+
+extension TransitionMaker where Value == TransitionNone {
+    
+    /// 创建 转场动画 并执行 duration 秒的动画
+    @discardableResult
+    public func value(duration:TimeInterval) -> AnimationTransition<Value> {
+        return animate(from: .none, duration: duration)
+    }
+}
+
 extension AnimationMaker {
+    
     
     /// 创建 指定变化值的帧动画 并执行 duration 秒的弹性动画
     @discardableResult
@@ -38,16 +64,13 @@ extension AnimationMaker {
     
 }
 
-extension AnimationMaker where Value == CGPoint {
-    /// 创建按 path 轨迹移动 duration 秒的动画
-    @discardableResult
-    public func value(along path:CGPath, duration:TimeInterval) -> Animation<CAKeyframeAnimation, Value> {
-        return animate(duration: duration, path: path)
-    }
-}
-
 
 extension AnimationsMaker {
+    
+    /// 转场动画
+    public var transition:UnknowMaker<Layer, TransitionStyle> {
+        return UnknowMaker(maker: self, keyPath: "transition")
+    }
     
     /// 对 cornerRadius 属性进行动画 默认 0
     public var cornerRadius:AnimationMaker<Layer, CGFloat> {
@@ -326,6 +349,12 @@ extension AnimationMaker where Value == CGSize {
 
 extension AnimationMaker where Value == CGPoint {
     
+    /// 创建按 path 轨迹移动 duration 秒的动画
+    @discardableResult
+    public func value(along path:CGPath, duration:TimeInterval) -> Animation<CAKeyframeAnimation, Value> {
+        return animate(duration: duration, path: path)
+    }
+    
     /// 对 point 的 x 属性进行动画
     public var x:AnimationMaker<Layer, CGFloat> {
         return AnimationMaker<Layer, CGFloat>(maker:maker, keyPath:"\(keyPath).x")
@@ -372,6 +401,7 @@ extension AnimationMaker where Value == CGRect {
 
 extension AnimationMaker where Value == CATransform3D {
     
+    
     /// 对 transform 的 translation(位移) 属性进行动画
     public var translation:UnknowMaker<Layer, CGAffineTransform> {
         return UnknowMaker<Layer, CGAffineTransform>(maker:maker, keyPath:"\(keyPath).translation")
@@ -382,6 +412,102 @@ extension AnimationMaker where Value == CATransform3D {
         return UnknowMaker<Layer, CGAffineTransform>(maker:maker, keyPath:"\(keyPath).rotation")
     }
     
+}
+
+extension UnknowMaker where Value == TransitionStyle {
+    
+    /// 推入效果 kCATransitionPush
+    public var push:TransitionMaker<Layer, TransitionDirection> {
+        return TransitionMaker<Layer, TransitionDirection>(maker: maker, style: .push)
+    }
+    /// 移入效果 kCATransitionMoveIn
+    public var moveIn:TransitionMaker<Layer, TransitionDirection> {
+        return TransitionMaker<Layer, TransitionDirection>(maker: maker, style: .moveIn)
+    }
+    /// 截开效果 kCATransitionReveal
+    public var reveal:TransitionMaker<Layer, TransitionDirection> {
+        return TransitionMaker<Layer, TransitionDirection>(maker: maker, style: .reveal)
+    }
+    /// 渐入渐出 kCATransitionFade
+    public var fade:TransitionMaker<Layer, TransitionNone> {
+        return TransitionMaker<Layer, TransitionNone>(maker: maker, style: .fade)
+    }
+    
+    /// 方块
+    public var cube:TransitionMaker<Layer, TransitionDirection> {
+        return TransitionMaker<Layer, TransitionDirection>(maker: maker, style: .cube)
+    }
+    /// 三角
+    public var suckEffect:TransitionMaker<Layer, TransitionDirection> {
+        return TransitionMaker<Layer, TransitionDirection>(maker: maker, style: .suckEffect)
+    }
+    /// 水波抖动
+    public var rippleEffect:TransitionMaker<Layer, TransitionNone> {
+        return TransitionMaker<Layer, TransitionNone>(maker: maker, style: .rippleEffect)
+    }
+    /// 上翻页
+    public var pageCurl:TransitionMaker<Layer, TransitionDirection> {
+        return TransitionMaker<Layer, TransitionDirection>(maker: maker, style: .pageCurl)
+    }
+    // 下翻页
+    public var pageUnCurl:TransitionMaker<Layer, TransitionDirection> {
+        return TransitionMaker<Layer, TransitionDirection>(maker: maker, style: .pageUnCurl)
+    }
+    // 上下翻转
+    public var oglFlip:TransitionMaker<Layer, TransitionDirection> {
+        return TransitionMaker<Layer, TransitionDirection>(maker: maker, style: .oglFlip)
+    }
+    // 镜头快门开
+    public var cameraIrisHollowOpen:TransitionMaker<Layer, TransitionNone> {
+        return TransitionMaker<Layer, TransitionNone>(maker: maker, style: .cameraIrisHollowOpen)
+    }
+    // 镜头快门开
+    public var cameraIrisHollowClose:TransitionMaker<Layer, TransitionNone> {
+        return TransitionMaker<Layer, TransitionNone>(maker: maker, style: .cameraIrisHollowClose)
+    }
+    
+    // MARK: 以下API效果请慎用
+    // 新版面在屏幕下方中间位置被释放出来覆盖旧版面.
+    public var spewEffect:TransitionMaker<Layer, TransitionDirection> {
+        return TransitionMaker<Layer, TransitionDirection>(maker: maker, style: .spewEffect)
+    }
+    // 旧版面在屏幕左下方或右下方被吸走, 显示下面的新版面
+    public var genieEffect:TransitionMaker<Layer, TransitionHorizontal> {
+        return TransitionMaker<Layer, TransitionHorizontal>(maker: maker, style: .genieEffect)
+    }
+    // 新版面在屏幕左下方或右下方被释放出来覆盖旧版面.
+    public var unGenieEffect:TransitionMaker<Layer, TransitionHorizontal> {
+        return TransitionMaker<Layer, TransitionHorizontal>(maker: maker, style: .unGenieEffect)
+    }
+    // 版面以水平方向像龙卷风式转出来.
+    public var twist:TransitionMaker<Layer, TransitionHorizontal> {
+        return TransitionMaker<Layer, TransitionHorizontal>(maker: maker, style: .twist)
+    }
+    // 版面垂直附有弹性的转出来.
+    public var tubey:TransitionMaker<Layer, TransitionVertical> {
+        return TransitionMaker<Layer, TransitionVertical>(maker: maker, style: .tubey)
+    }
+    // 旧版面360度旋转并淡出, 显示出新版面.
+    public var swirl:TransitionMaker<Layer, TransitionDirection> {
+        return TransitionMaker<Layer, TransitionDirection>(maker: maker, style: .swirl)
+    }
+    // 旧版面淡出并显示新版面.
+    public var charminUltra:TransitionMaker<Layer, TransitionDirection> {
+        return TransitionMaker<Layer, TransitionDirection>(maker: maker, style: .charminUltra)
+    }
+    // 新版面由小放大走到前面, 旧版面放大由前面消失.
+    public var zoomyIn:TransitionMaker<Layer, TransitionDirection> {
+        return TransitionMaker<Layer, TransitionDirection>(maker: maker, style: .zoomyIn)
+    }
+    // 新版面屏幕外面缩放出现, 旧版面缩小消失.
+    public var zoomyOut:TransitionMaker<Layer, TransitionDirection> {
+        return TransitionMaker<Layer, TransitionDirection>(maker: maker, style: .zoomyOut)
+    }
+    // 像按 ”home” 按钮的效果.
+    public var oglApplicationSuspend:TransitionMaker<Layer, TransitionDirection> {
+        return TransitionMaker<Layer, TransitionDirection>(maker: maker, style: .oglApplicationSuspend)
+    }
+
 }
 
 extension UnknowMaker where Value == CGAffineTransform {

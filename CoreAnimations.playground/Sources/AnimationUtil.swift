@@ -8,11 +8,24 @@
 
 import QuartzCore
 
+private let kTransitionAnimation:String = "transitionAnimation"
 private let kShakeAnimation:String = "shakeAnimation"
 private let kShockAnimation:String = "shockAnimation"
 
 
 extension CALayer {
+    
+    public func animate(transition style:TransitionStyle, from direction:TransitionDirection) {
+        let transition = CATransition()
+        transition.type = style.rawValue
+        if !direction.rawValue.isEmpty {
+            transition.subtype = direction.rawValue
+        }
+        transition.duration = 0.5
+        transition.isRemovedOnCompletion = true
+        removeAnimation(forKey: kTransitionAnimation)
+        add(transition, forKey: kTransitionAnimation)
+    }
     
     /// 摇晃动画
     public func animateShake(count:Float = 3) {

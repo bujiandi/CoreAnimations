@@ -155,6 +155,7 @@ open class NetStateLayer: CALayer {
     
     open override func layoutSublayers() {
         super.layoutSublayers()
+        shareLayer.strokeColor = progressColor ?? CGColor.device(ARGB: 0xFF009CCC)
         shareLayer.frame = bounds
         var transform = CGAffineTransform.identity
         let path = CGPath(roundedRect: bounds.insetBy(dx: 5, dy: 5), cornerWidth: (bounds.width - 10) / 2, cornerHeight: (bounds.height - 10) / 2, transform: &transform)
