@@ -21,7 +21,7 @@ public class TransitionMaker<Layer, Value> where Layer : CALayer, Value : RawRep
     @discardableResult
     public func animate(from direction:Value, duration:TimeInterval) -> AnimationTransition<Value> {
         let animation = AnimationTransition<Value>(style: style)
-        animation.caAnimation.subtype = direction.rawValue
+        animation.caAnimation.subtype = convertToOptionalCATransitionSubtype(direction.rawValue)
         animation.caAnimation.duration = duration
         animation.caAnimation.isRemovedOnCompletion = true
         maker.append(animation.caAnimation)
@@ -79,4 +79,10 @@ public enum TransitionStyle: String {
     case zoomyIn                // 新版面由小放大走到前面, 旧版面放大由前面消失.
     case zoomyOut               // 新版面屏幕外面缩放出现, 旧版面缩小消失.
     case oglApplicationSuspend  // 像按 ”home” 按钮的效果.
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalCATransitionSubtype(_ input: String?) -> CATransitionSubtype? {
+	guard let input = input else { return nil }
+	return CATransitionSubtype(rawValue: input)
 }

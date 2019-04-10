@@ -10,7 +10,7 @@ import QuartzCore
 
 open class AnimationBasic<T, Value> where T : CAAnimation {
     
-    open let caAnimation:T
+    public let caAnimation:T
     
     public init(_ caAnimation:T) {
         self.caAnimation = caAnimation
@@ -108,7 +108,12 @@ open class AnimationBasic<T, Value> where T : CAAnimation {
      * `removed'. */
     @discardableResult
     open func fill(mode:AnimationFillMode) -> Self {
-        caAnimation.fillMode = mode.rawValue
+        caAnimation.fillMode = convertToCAMediaTimingFillMode(mode.rawValue)
         return self
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToCAMediaTimingFillMode(_ input: String) -> CAMediaTimingFillMode {
+	return CAMediaTimingFillMode(rawValue: input)
 }

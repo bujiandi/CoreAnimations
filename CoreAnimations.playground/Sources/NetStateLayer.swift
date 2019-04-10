@@ -203,7 +203,7 @@ open class NetStateLayer: CALayer {
             $0.strokeStart
                 .value(from: start, to: 0, duration: Double(start) / 8)
             $0.strokeEnd
-                .value(from: end, to: over, duration: Double(fabs(over - end)) / 4)
+                .value(from: end, to: over, duration: Double(abs(over - end)) / 4)
             $0.timingFunction(.easeOut)
         }
     }

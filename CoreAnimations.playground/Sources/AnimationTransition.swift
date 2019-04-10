@@ -12,8 +12,13 @@ open class AnimationTransition<Value> : AnimationBasic<CATransition, Value> wher
     
     public init(style:TransitionStyle) {
         let transition = CATransition()
-        transition.type = style.rawValue
+        transition.type = convertToCATransitionType(style.rawValue)
         super.init(transition)
     }
     
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToCATransitionType(_ input: String) -> CATransitionType {
+	return CATransitionType(rawValue: input)
 }

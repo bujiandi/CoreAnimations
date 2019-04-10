@@ -17,9 +17,9 @@ extension CALayer {
     
     public func animate(transition style:TransitionStyle, from direction:TransitionDirection) {
         let transition = CATransition()
-        transition.type = style.rawValue
+        transition.type = convertToCATransitionType(style.rawValue)
         if !direction.rawValue.isEmpty {
-            transition.subtype = direction.rawValue
+            transition.subtype = convertToOptionalCATransitionSubtype(direction.rawValue)
         }
         transition.duration = 0.5
         transition.isRemovedOnCompletion = true
@@ -48,4 +48,15 @@ extension CALayer {
 
     }
     
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToCATransitionType(_ input: String) -> CATransitionType {
+	return CATransitionType(rawValue: input)
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalCATransitionSubtype(_ input: String?) -> CATransitionSubtype? {
+	guard let input = input else { return nil }
+	return CATransitionSubtype(rawValue: input)
 }

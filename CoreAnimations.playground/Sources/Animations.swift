@@ -558,11 +558,11 @@ extension CAMediaTiming where Self : CALayer {
 
 /// 动画过渡 曲线
 extension CAMediaTimingFunction {
-    public static let easeInOut:CAMediaTimingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-    public static let easeOut:CAMediaTimingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
-    public static let easeIn:CAMediaTimingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
-    public static let linear:CAMediaTimingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
-    public static let `default`:CAMediaTimingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
+    public static let easeInOut:CAMediaTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+    public static let easeOut:CAMediaTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+    public static let easeIn:CAMediaTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeIn)
+    public static let linear:CAMediaTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
+    public static let `default`:CAMediaTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.default)
 }
 
 
