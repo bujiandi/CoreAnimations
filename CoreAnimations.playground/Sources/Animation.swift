@@ -106,7 +106,8 @@ extension Animation where T : CABasicAnimation {
     }
 }
 
-@available(iOSApplicationExtension 9.0, *)
+//@available(iOSApplicationExtension 9.0, *)
+@available(iOS 9.0, *)
 extension Animation where T : CASpringAnimation {
     /* The mass of the object attached to the end of the spring. Must be greater
      than 0. Defaults to one. */
